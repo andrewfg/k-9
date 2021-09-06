@@ -44,6 +44,7 @@ public class MessageTopView extends LinearLayout {
     public static final int PROGRESS_MAX_WITH_MARGIN = 950;
     public static final int PROGRESS_STEP_DURATION = 180;
 
+
     private ToolableViewAnimator viewAnimator;
     private ProgressBar progressBar;
     private TextView progressText;
@@ -434,15 +435,15 @@ public class MessageTopView extends LinearLayout {
                     // swipe direction was reversed
                     hideSwipeFeedback();
                     swipeCatching = false;
+                    swipeToLeft = thisSwipeToLeft;
                 }
                 if (swipeCatching) {
-                    swipeToLeft = thisSwipeToLeft;
                     showSwipeFeedback();
                 }
                 return true;
             }
             case MotionEvent.ACTION_UP: {
-                if (swipeCatching) {
+                if (swipeCatching && (swipeCatcher != null)) {
                     swipeCatcher.onSwipe(swipeToLeft);
                 }
                 // fall through ...
