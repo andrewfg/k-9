@@ -15,7 +15,7 @@ private const val FOLDER_ID = 42L
 
 class NotificationDataTest : RobolectricTest() {
     private val account = createFakeAccount()
-    private val notificationData = NotificationData(account, 0)
+    private val notificationData = NotificationData(account)
 
     @Test
     fun testAddNotificationContent() {
@@ -107,46 +107,6 @@ class NotificationDataTest : RobolectricTest() {
         val contentTwo = createNotificationContent("2")
         notificationData.addNotificationContent(contentTwo)
         assertThat(notificationData.newMessagesCount).isEqualTo(2)
-    }
-
-    @Test
-    fun testUnreadMessagesCount() {
-        val notificationData = NotificationData(account, 42)
-        assertThat(notificationData.unreadMessageCount).isEqualTo(42)
-
-        val content = createNotificationContent("1")
-        notificationData.addNotificationContent(content)
-        assertThat(notificationData.unreadMessageCount).isEqualTo(43)
-
-        val contentTwo = createNotificationContent("2")
-        notificationData.addNotificationContent(contentTwo)
-        assertThat(notificationData.unreadMessageCount).isEqualTo(44)
-    }
-
-    @Test
-    fun testContainsStarredMessages() {
-        assertThat(notificationData.containsStarredMessages()).isFalse()
-
-        notificationData.addNotificationContent(createNotificationContentForStarredMessage())
-
-        assertThat(notificationData.containsStarredMessages()).isTrue()
-    }
-
-    @Test
-    fun testContainsStarredMessagesWithAdditionalMessages() {
-        notificationData.addNotificationContent(createNotificationContent("1"))
-        notificationData.addNotificationContent(createNotificationContent("2"))
-        notificationData.addNotificationContent(createNotificationContent("3"))
-        notificationData.addNotificationContent(createNotificationContent("4"))
-        notificationData.addNotificationContent(createNotificationContent("5"))
-        notificationData.addNotificationContent(createNotificationContent("6"))
-        notificationData.addNotificationContent(createNotificationContent("7"))
-        notificationData.addNotificationContent(createNotificationContent("8"))
-        assertThat(notificationData.containsStarredMessages()).isFalse()
-
-        notificationData.addNotificationContent(createNotificationContentForStarredMessage())
-
-        assertThat(notificationData.containsStarredMessages()).isTrue()
     }
 
     @Test
@@ -290,11 +250,12 @@ class NotificationDataTest : RobolectricTest() {
     }
 
     private fun createNotificationContent(messageReference: MessageReference): NotificationContent {
-        return NotificationContent(messageReference, "", "", "", "", false)
-    }
-
-    private fun createNotificationContentForStarredMessage(): NotificationContent {
-        val messageReference = createMessageReference("42")
-        return NotificationContent(messageReference, "", "", "", "", true)
+        return NotificationContent(
+            messageReference = messageReference,
+            sender = "irrelevant",
+            subject = "irrelevant",
+            preview = "irrelevant",
+            summary = "irrelevant"
+        )
     }
 }
